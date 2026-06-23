@@ -1,7 +1,16 @@
+/**
+ * SIDE: Server-side
+ * Description: API route handler to fetch the details of a single recipe by ID.
+ */
+
 import { NextRequest, NextResponse } from "next/server";
 import { getRecipeById } from "@/services/recipe.service";
 import { ApiResponse, IRecipe } from "@/types";
 
+/**
+ * Handles GET requests to retrieve a single recipe.
+ * Extracts the recipe ID parameter from route params.
+ */
 export async function GET(
   _req: NextRequest,
   { params }: { params: Promise<{ id: string }> }
@@ -28,3 +37,4 @@ export async function GET(
     );
   }
 }
+

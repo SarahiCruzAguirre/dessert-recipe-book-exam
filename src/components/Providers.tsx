@@ -1,3 +1,9 @@
+/**
+ * SIDE: Client-side
+ * Description: Application wrapper context providers.
+ * Combines next-auth SessionProvider and application local I18nProvider context for client consumption.
+ */
+
 "use client";
 
 import { SessionProvider } from "next-auth/react";
@@ -10,3 +16,4 @@ export default function Providers({ children }: { children: React.ReactNode }) {
     </I18nProvider>
   );
 }
+

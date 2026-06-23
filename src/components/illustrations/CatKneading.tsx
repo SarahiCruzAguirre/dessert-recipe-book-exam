@@ -1,3 +1,8 @@
+/**
+ * SIDE: Client-side (Presenter Component)
+ * Description: SVG vector illustration of a cute cat baker kneading dough.
+ */
+
 import React from "react";
 
 interface CatKneadingProps {
@@ -7,6 +12,7 @@ interface CatKneadingProps {
 }
 
 export default function CatKneading({ className = "", width = 200, height = 200 }: CatKneadingProps) {
+
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"

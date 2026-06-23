@@ -1,9 +1,19 @@
+/**
+ * SIDE: Server-side
+ * Description: Service responsible for managing user favorite recipes, including adding,
+ * removing, toggling favorites, and retrieving favorite recipes or structured user association.
+ */
+
 import { connectDB } from "@/lib/db";
 import Favorite from "@/models/Favorite";
 import Recipe from "@/models/Recipe";
 import { IRecipe } from "@/types";
 
 // ── Obtener IDs de recetas favoritas de un usuario ───────────
+/**
+ * Retrieves an array of recipe IDs marked as favorite by a specific user.
+ * Primarily used on client pages to highlight recipes that are already favorited.
+ */
 export async function getUserFavoriteIds(userId: string): Promise<string[]> {
   await connectDB();
   const favorites = await Favorite.find({ userId }).select("recipeId").lean();
@@ -11,6 +21,10 @@ export async function getUserFavoriteIds(userId: string): Promise<string[]> {
 }
 
 // ── Obtener recetas favoritas completas de un usuario ────────
+/**
+ * Retrieves the full populated recipe objects that are favorited by a user,
+ * ordered by the date they were added (newest first).
+ */
 export async function getUserFavorites(userId: string): Promise<IRecipe[]> {
   await connectDB();
   const favorites = await Favorite.find({ userId })
@@ -26,6 +40,10 @@ export async function getUserFavorites(userId: string): Promise<IRecipe[]> {
 }
 
 // ── Agregar a favoritos ──────────────────────────────────────
+/**
+ * Associates a recipe with a user by creating a Favorite document.
+ * Ensures the target recipe exists first, and uses an upsert to avoid duplicate entries.
+ */
 export async function addFavorite(
   userId: string,
   recipeId: string
@@ -44,6 +62,9 @@ export async function addFavorite(
 }
 
 // ── Quitar de favoritos ──────────────────────────────────────
+/**
+ * Removes a recipe association from a user's favorites by deleting the matching document.
+ */
 export async function removeFavorite(
   userId: string,
   recipeId: string
@@ -53,6 +74,10 @@ export async function removeFavorite(
 }
 
 // ── Toggle favorito ──────────────────────────────────────────
+/**
+ * Toggles a recipe favorite status: removes it if it exists, or adds it if it doesn't.
+ * Returns the final boolean favorite status.
+ */
 export async function toggleFavorite(
   userId: string,
   recipeId: string
@@ -70,6 +95,10 @@ export async function toggleFavorite(
 }
 
 // ── Admin: ver todos los favoritos agrupados por usuario ─────
+/**
+ * Admin utility: retrieves all favorite entries across the application,
+ * populated with both User details and Recipe names/images.
+ */
 export async function getAllFavoritesWithUsers() {
   await connectDB();
   const favorites = await Favorite.find({})
@@ -79,3 +108,4 @@ export async function getAllFavoritesWithUsers() {
     .lean();
   return JSON.parse(JSON.stringify(favorites));
 }
+

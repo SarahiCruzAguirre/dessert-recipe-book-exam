@@ -1,3 +1,8 @@
+/**
+ * SIDE: Client-side (Presenter Component)
+ * Description: SVG vector icon of a cute cat face, used for indicating favorite state.
+ */
+
 import React from "react";
 
 interface CatFavoriteIconProps {
@@ -6,6 +11,7 @@ interface CatFavoriteIconProps {
 }
 
 export default function CatFavoriteIcon({ className = "w-5 h-5", filled = false }: CatFavoriteIconProps) {
+
   return (
     <svg
       viewBox="0 0 24 24"

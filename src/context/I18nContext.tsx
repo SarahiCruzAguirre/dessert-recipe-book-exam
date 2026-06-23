@@ -1,3 +1,9 @@
+/**
+ * SIDE: Client-side
+ * Description: Internationalization context for translation dictionaries.
+ * Exposes a 't' translation function, locale state (ES/EN), and persists choice to localStorage and cookies.
+ */
+
 "use client";
 
 import React, { createContext, useContext, useState, useEffect } from "react";
@@ -11,6 +17,7 @@ interface I18nContextType {
   setLocale: (locale: Locale) => void;
   t: (key: string, variables?: Record<string, string>) => string;
 }
+
 
 const dictionaries = { es, en };
 

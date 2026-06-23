@@ -1,12 +1,27 @@
+/**
+ * SIDE: Server-side
+ * Description: Service responsible for sending transactional emails (welcome emails and custom
+ * messages from the admin panel) using Nodemailer with Gmail SMTP (App Password) or OAuth2 authentication.
+ */
+
 import nodemailer from "nodemailer";
 
-// Helper to strip any surrounding single or double quotes from environment variables
+/**
+ * Helper to strip any surrounding single or double quotes from environment variables.
+ * Useful when env values are loaded from files with literal quotes.
+ */
 function cleanEnv(key: string): string {
   const val = process.env[key] || "";
   return val.replace(/^['"]|['"]$/g, "").trim();
 }
 
+
 // ── Transporter (singleton) ──────────────────────────────────
+/**
+ * Configures and creates the Nodemailer transport instance.
+ * Checks for either EMAIL_PASSWORD (preferred App Password) or OAuth2 credentials (clientId, secret, refresh token).
+ * Defaults to empty password config if neither are available (with warnings).
+ */
 function createTransporter() {
   const emailUser = cleanEnv("EMAIL_USER");
   const emailPassword = cleanEnv("EMAIL_PASSWORD");
@@ -51,6 +66,10 @@ function createTransporter() {
 }
 
 // ── Template base ────────────────────────────────────────────
+/**
+ * Wraps dynamic content inside a standard HTML email layout styled for Crumb Club.
+ * Includes consistent branding, fonts, buttons, and footer.
+ */
 function baseTemplate(content: string): string {
   return `
     <!DOCTYPE html>
@@ -87,6 +106,10 @@ function baseTemplate(content: string): string {
 }
 
 // ── Email de bienvenida ──────────────────────────────────────
+/**
+ * Sends a welcome email to a newly registered user containing their name.
+ * Uses the default email sender configured in environment variables.
+ */
 export async function sendWelcomeEmail(
   to: string,
   name: string
@@ -112,6 +135,10 @@ export async function sendWelcomeEmail(
 }
 
 // ── Email manual (admin) ─────────────────────────────────────
+/**
+ * Sends a custom broadcast or targeted email to a specific user.
+ * Triggered from the administrator dashboard page.
+ */
 export async function sendCustomEmail(
   to: string,
   subject: string,
@@ -139,3 +166,4 @@ export async function sendCustomEmail(
     html,
   });
 }
+

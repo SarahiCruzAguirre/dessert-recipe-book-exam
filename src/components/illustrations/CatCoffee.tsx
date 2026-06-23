@@ -1,3 +1,8 @@
+/**
+ * SIDE: Client-side (Presenter Component)
+ * Description: SVG vector illustration of a cute winking cat barista holding a coffee cup.
+ */
+
 import React from "react";
 
 interface CatCoffeeProps {
@@ -7,6 +12,7 @@ interface CatCoffeeProps {
 }
 
 export default function CatCoffee({ className = "", width = 200, height = 200 }: CatCoffeeProps) {
+
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"

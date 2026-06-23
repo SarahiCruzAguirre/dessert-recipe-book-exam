@@ -1,3 +1,10 @@
+/**
+ * SIDE: Client-side
+ * Description: Administration dashboard. Displays lists of users with their count of saved favorite recipes,
+ * allows expanding users to inspect exact saved recipe names, and exposes an email broadcast panel to send
+ * welcome or custom notifications.
+ */
+
 "use client";
 
 import { useEffect, useState } from "react";
@@ -14,6 +21,7 @@ import {
   XCircle,
 } from "lucide-react";
 import { useI18n } from "@/context/I18nContext";
+
 
 interface FavoriteEntry {
   _id: string;
@@ -191,7 +199,7 @@ export default function AdminPage() {
                   key={i}
                   className="flex items-center gap-2 text-sm text-brand-charcoal/80 font-medium"
                 >
-                  <span className="w-1.5 h-1.5 rounded-full bg-brand-blue flex-shrink-0" />
+                  <span className="w-1.5 h-1.5 rounded-full bg-brand-blue shrink-0" />
                   <span>{r}</span>
                 </li>
               ))}
@@ -392,9 +400,9 @@ export default function AdminPage() {
                 }`}
               >
                 {emailResult.success ? (
-                  <CheckCircle2 className="w-4 h-4 flex-shrink-0 text-emerald-500" />
+                  <CheckCircle2 className="w-4 h-4 shrink-0 text-emerald-500" />
                 ) : (
-                  <XCircle className="w-4 h-4 flex-shrink-0 text-rose-500" />
+                  <XCircle className="w-4 h-4 shrink-0 text-rose-500" />
                 )}
                 <span>{emailResult.message}</span>
               </div>

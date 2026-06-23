@@ -1,5 +1,14 @@
+/**
+ * SIDE: Server-side
+ * Description: Mongoose database schema and interface definition for Recipe documents.
+ * Represents a recipe containing cooking instructions, difficulty levels, and metadata.
+ */
+
 import mongoose, { Document, Schema } from "mongoose";
 
+/**
+ * Interface representing a Recipe document in the database.
+ */
 export interface IRecipeDocument extends Document {
   name: string;
   image: string;
@@ -13,6 +22,9 @@ export interface IRecipeDocument extends Document {
   createdAt: Date;
 }
 
+/**
+ * Schema definition for the Recipe collection.
+ */
 const RecipeSchema = new Schema<IRecipeDocument>(
   {
     name: {
@@ -65,3 +77,4 @@ const Recipe =
   mongoose.model<IRecipeDocument>("Recipe", RecipeSchema);
 
 export default Recipe;
+

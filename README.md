@@ -1,36 +1,87 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# RecipeBook
+
+RecipeBook is a modern, responsive web application for exploring, managing, and sharing dessert and bakery recipes. The project is designed with an interactive dual-language user interface, robust security, and administrator features.
+
+## Tech Stack
+
+*   **Framework:** Next.js (App Router)
+*   **Database:** MongoDB via Mongoose
+*   **Authentication:** NextAuth.js (Credentials Provider with hashed passwords)
+*   **Styling:** Tailwind CSS v4, Lucide React icons, and Spline 3D animations
+*   **Email Services:** Nodemailer (supporting SMTP App Passwords and Google OAuth2 protocols)
+*   **Internationalization:** Local context-based translation provider (supporting Spanish and English)
+
+## Key Features
+
+1.  **Recipe Explorer:** A clean catalog page showing recipe cards with details on preparation time, difficulty level, and category.
+2.  **Interactive Details:** A detailed view for each recipe showing ingredients list, step-by-step instructions, and servings selector.
+3.  **Favorites System:** Authenticated users can toggle recipes as favorites. Favorites are persistent in the database and manageable from a dedicated user view.
+4.  **Internationalization:** Complete interface translation between Spanish and English, storing selections in local storage and cookies.
+5.  **Admin Panel:** Administrators can view aggregated application statistics, expand user favorite lists, and send system notification emails (welcome or custom broadcast messages).
+6.  **3D Visuals:** Spline 3D integration in authentication routes for a high-quality aesthetic layout.
+
+## Project Structure
+
+*   `src/app/`: Next.js pages, layouts, and API routes.
+*   `src/components/`: Reusable UI components and vector illustrations.
+*   `src/context/`: Context providers, including multi-language support.
+*   `src/lib/`: Database configuration (Mongoose connection cache) and authentication handler.
+*   `src/locales/`: JSON translation files.
+*   `src/models/`: Database schema definitions (User, Recipe, Favorite).
+*   `src/services/`: Server-side services for database access and email processing.
+*   `src/types/`: Shared and environment type definitions.
 
 ## Getting Started
 
-First, run the development server:
+### Prerequisites
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+*   Node.js (v18 or higher recommended)
+*   MongoDB instance (local or Atlas)
+*   SMTP credentials (e.g., Gmail App Password or OAuth2 client)
+
+### Environment Variables
+
+Create a `.env.local` file in the root directory and define the following variables:
+
+```env
+# MongoDB Connection URI
+MONGODB_URI=mongodb://localhost:27017/recipebook
+
+# NextAuth Configuration
+NEXTAUTH_SECRET=your_nextauth_secret_key
+NEXTAUTH_URL=http://localhost:3000
+
+# Administrator Setup
+ADMIN_EMAIL=admin@example.com
+
+# SMTP / Email Configuration
+EMAIL_USER=your_email@gmail.com
+
+# For SMTP App Password Authentication:
+EMAIL_PASSWORD=your_gmail_app_password
+
+# For SMTP Google OAuth2 Authentication (Alternative):
+GCLOUD_CLIENT_ID=your_google_client_id
+GCLOUD_CLIENT_SECRET=your_google_client_secret
+GCLOUD_REFRESH_TOKEN=your_google_refresh_token
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### Installation
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+1.  Install dependencies:
+    ```bash
+    npm install
+    ```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+2.  Run the development server:
+    ```bash
+    npm run dev
+    ```
 
-## Learn More
+3.  Open [http://localhost:3000](http://localhost:3000) in your web browser.
 
-To learn more about Next.js, take a look at the following resources:
+## Architectural Notes
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+The codebase maintains strict separation of execution contexts:
+*   Files starting with `SIDE: Server-side` run strictly in the Node.js server context (API routes, services, database models, and connection logic).
+*   Files starting with `SIDE: Client-side` execute in the browser context (interactive components, pages marked with `"use client"`, and contexts using browser API like localStorage).

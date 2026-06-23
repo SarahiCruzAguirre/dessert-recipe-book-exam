@@ -1,3 +1,9 @@
+/**
+ * SIDE: Client-side
+ * Description: Login page. Contains LoginForm that handles credentials authentication through NextAuth.
+ * Integrates interactive live validation for fields and imports a Spline 3D view for styling.
+ */
+
 "use client";
 
 import { Suspense, useState } from "react";
@@ -8,6 +14,7 @@ import Script from "next/script";
 import { Eye, EyeOff, Loader2 } from "lucide-react";
 import { useI18n } from "@/context/I18nContext";
 import CuteCroissant from "@/components/illustrations/CuteCroissant";
+
 
 function LoginForm() {
   const router = useRouter();

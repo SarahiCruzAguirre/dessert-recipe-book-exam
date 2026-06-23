@@ -1,9 +1,18 @@
+/**
+ * SIDE: Server-side
+ * Description: Service responsible for managing user accounts, including registration,
+ * role assignment (admin/user comparison), password hashing, and user queries.
+ */
+
 import bcrypt from "bcryptjs";
 import { connectDB } from "@/lib/db";
 import User from "@/models/User";
 import { sendWelcomeEmail } from "@/services/email.service";
 import { IUser } from "@/types";
 
+/**
+ * Interface representing the required fields to register a new user.
+ */
 interface RegisterInput {
   name: string;
   email: string;
@@ -11,6 +20,12 @@ interface RegisterInput {
 }
 
 // ── Registrar nuevo usuario ──────────────────────────────────
+/**
+ * Registers a new user. Performs checks for duplicate emails,
+ * hashes the user's password with bcrypt, checks if the email matches
+ * the ADMIN_EMAIL environment variable to assign roles, creates the document,
+ * and schedules a background welcome email.
+ */
 export async function registerUser(
   input: RegisterInput
 ): Promise<{ user: IUser; message: string }> {
@@ -55,6 +70,10 @@ export async function registerUser(
 }
 
 // ── Obtener todos los usuarios (solo admin) ──────────────────
+/**
+ * Admin utility to retrieve all user documents (excluding passwords),
+ * sorted by registration date (newest first).
+ */
 export async function getAllUsers(): Promise<IUser[]> {
   await connectDB();
   const users = await User.find({})
@@ -65,9 +84,13 @@ export async function getAllUsers(): Promise<IUser[]> {
 }
 
 // ── Obtener usuario por email ────────────────────────────────
+/**
+ * Retrieves a user document (excluding password) matching a specific email address.
+ */
 export async function getUserByEmail(email: string): Promise<IUser | null> {
   await connectDB();
   const user = await User.findOne({ email }).select("-password").lean();
   if (!user) return null;
   return JSON.parse(JSON.stringify(user));
 }
+

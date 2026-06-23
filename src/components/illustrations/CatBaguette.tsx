@@ -1,3 +1,8 @@
+/**
+ * SIDE: Client-side (Presenter Component)
+ * Description: SVG vector illustration of a cute cat wearing a chef's hat holding a baguette.
+ */
+
 import React from "react";
 
 interface CatBaguetteProps {
@@ -7,6 +12,7 @@ interface CatBaguetteProps {
 }
 
 export default function CatBaguette({ className = "", width = 200, height = 200 }: CatBaguetteProps) {
+
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"

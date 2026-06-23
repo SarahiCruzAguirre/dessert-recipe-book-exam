@@ -1,3 +1,10 @@
+/**
+ * SIDE: Server-side
+ * Description: NextAuth configurations defining authorization handlers,
+ * session settings, credential providers, password checking, and custom JWT/Session callbacks
+ * to append user roles and IDs to the active session.
+ */
+
 import NextAuth from "next-auth";
 import Credentials from "next-auth/providers/credentials";
 import bcrypt from "bcryptjs";
@@ -23,6 +30,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
 
         await connectDB();
 
+        // Query the user from MongoDB explicitly asking for the password field
         const user = await User.findOne({ email: credentials.email }).select(
           "+password"
         );
@@ -31,6 +39,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
           throw new Error("Usuario no encontrado");
         }
 
+        // Compare input password hash with database password hash
         const isValid = await bcrypt.compare(
           credentials.password as string,
           user.password
@@ -50,6 +59,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
     }),
   ],
   callbacks: {
+    // When JWT is created/updated, transfer user role & ID to the token payload
     async jwt({ token, user }) {
       if (user) {
         token.id = user.id;
@@ -57,6 +67,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
       }
       return token;
     },
+    // When session is requested, transfer role & ID from JWT token to user session object
     async session({ session, token }) {
       if (session.user) {
         session.user.id = token.id as string;
@@ -66,3 +77,4 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
     },
   },
 });
+

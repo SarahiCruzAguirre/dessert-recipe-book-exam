@@ -1,3 +1,8 @@
+/**
+ * SIDE: Shared (Types)
+ * Description: Common TypeScript interfaces and types utilized across both client and server applications.
+ */
+
 // ─── Usuario ────────────────────────────────────────────────
 export interface IUser {
   _id: string;

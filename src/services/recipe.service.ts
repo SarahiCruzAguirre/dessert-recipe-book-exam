@@ -1,8 +1,18 @@
+/**
+ * SIDE: Server-side
+ * Description: Service responsible for querying recipes from the database, retrieving details,
+ * and seeding initial dummy recipes when the database starts.
+ */
+
 import { connectDB } from "@/lib/db";
 import Recipe from "@/models/Recipe";
 import { IRecipe } from "@/types";
 
 // ── Obtener todas las recetas (campos de listado) ────────────
+/**
+ * Retrieves all recipes stored in the database.
+ * Returns a subset of fields optimized for catalog/grid views, sorted by creation date.
+ */
 export async function getAllRecipes(): Promise<IRecipe[]> {
   await connectDB();
   const recipes = await Recipe.find({})
@@ -13,6 +23,10 @@ export async function getAllRecipes(): Promise<IRecipe[]> {
 }
 
 // ── Obtener receta por ID (campos completos para detalle) ────
+/**
+ * Retrieves the complete details of a single recipe by its ID.
+ * Returns null if the recipe is not found.
+ */
 export async function getRecipeById(id: string): Promise<IRecipe | null> {
   await connectDB();
   const recipe = await Recipe.findById(id).lean();
@@ -21,16 +35,22 @@ export async function getRecipeById(id: string): Promise<IRecipe | null> {
 }
 
 // ── Seed de recetas iniciales ────────────────────────────────
+/**
+ * Seeds a default list of 15 sweet bakery, dessert, and drink recipes.
+ * Checks first if there are already 15 or more recipes to avoid duplicate executions.
+ */
 export async function seedRecipes(): Promise<void> {
   await connectDB();
   
-  // Buscar si ya existe la cantidad completa de recetas (15 o similar)
+  // Buscar si ya existe la cantidad completa de recetas (15 o similar) y no hay enlaces rotos de la base anterior
   const count = await Recipe.countDocuments({});
-  if (count >= 15) return;
+  const hasBroken = await Recipe.findOne({ image: /photo-tODGldWfHiU/ });
+  if (count >= 15 && !hasBroken) return;
 
   console.log("Seeding 15 cute bakery and sweet drink recipes...");
   // Limpiar recetas viejas para forzar el re-seed con la nueva temática completa
   await Recipe.deleteMany({});
+
 
   const recipes = [
     {
@@ -106,8 +126,9 @@ export async function seedRecipes(): Promise<void> {
     },
     {
       name: "Teddy Bear Strawberry Macarons",
-      image: "https://images.unsplash.com/photo-tODGldWfHiU?w=800",
+      image: "https://images.unsplash.com/photo-1558591710-4b4a1ae0f04d?w=800",
       prepTime: 90,
+
       difficulty: "Difícil",
       description: "Delicados macarons franceses rellenos de ganache de fresa silvestre, decorados a mano con tiernas caritas de osito.",
       category: "Postres",
@@ -185,8 +206,9 @@ export async function seedRecipes(): Promise<void> {
     },
     {
       name: "Bingsu de Mango y Matcha",
-      image: "https://images.unsplash.com/photo-g7I4T4rNWDE?w=800",
+      image: "https://images.unsplash.com/photo-1528360983277-13d401cdc186?w=800",
       prepTime: 15,
+
       difficulty: "Fácil",
       description: "Granizado de leche coreano ultrafino con rodajas de mango fresco, jarabe de matcha y una bola de helado de vainilla.",
       category: "Postres",
@@ -262,8 +284,9 @@ export async function seedRecipes(): Promise<void> {
     },
     {
       name: "Taro Bubble Milk Tea",
-      image: "https://images.unsplash.com/photo-FchqkZj7jBU?w=800",
+      image: "https://images.unsplash.com/photo-1541658016709-82535e94bc69?w=800",
       prepTime: 15,
+
       difficulty: "Fácil",
       description: "Una bebida de té de leche morada con taro y perlas de tapioca masticables caramelizadas con azúcar morena.",
       category: "Bebidas",
@@ -286,8 +309,9 @@ export async function seedRecipes(): Promise<void> {
     },
     {
       name: "Dalgona Coffee Batido",
-      image: "https://images.unsplash.com/photo-PFtWCZxgN9M?w=800",
+      image: "https://images.unsplash.com/photo-1594911774802-8822a707cbb3?w=800",
       prepTime: 10,
+
       difficulty: "Fácil",
       description: "El famoso café coreano batido hasta formar una crema densa y dulce, servido sobre leche fría con hielo.",
       category: "Bebidas",
@@ -308,8 +332,9 @@ export async function seedRecipes(): Promise<void> {
     },
     {
       name: "Bungeoppang de Nutella",
-      image: "https://images.unsplash.com/photo-u1zNW2ZdTYM?w=800",
+      image: "https://images.unsplash.com/photo-1614064641938-3bbee52942c7?w=800",
       prepTime: 30,
+
       difficulty: "Medio",
       description: "Gofres coreanos tradicionales con forma de pececito dorado, crujientes por fuera y rellenos de Nutella cremosa.",
       category: "Postres",
@@ -334,8 +359,9 @@ export async function seedRecipes(): Promise<void> {
     },
     {
       name: "Peach Cream Mochi",
-      image: "https://images.unsplash.com/photo-RXOooKUogpo?w=800",
+      image: "https://images.unsplash.com/photo-1628088062854-d1870b4553da?w=800",
       prepTime: 40,
+
       difficulty: "Medio",
       description: "Pastelitos de arroz glutinoso coreanos súper suaves rellenos de crema batida de durazno y trocitos de fruta.",
       category: "Postres",
@@ -381,8 +407,9 @@ export async function seedRecipes(): Promise<void> {
     },
     {
       name: "Sweet Potato Bread (Goguma Ppang)",
-      image: "https://images.unsplash.com/photo-k0MigzUz-vI?w=800",
+      image: "https://images.unsplash.com/photo-1647891940244-k0MigzUz-vI?w=800",
       prepTime: 60,
+
       difficulty: "Medio",
       description: "Panecillos coreanos horneados con forma de camote dulce (boniato), hechos con una masa masticable de tapioca y rellenos de camote cremoso.",
       category: "Panadería",

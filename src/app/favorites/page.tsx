@@ -1,3 +1,9 @@
+/**
+ * SIDE: Client-side
+ * Description: Favorites page. Displays the list of recipes that the currently logged-in user
+ * has saved as favorites. Permits toggling (removing) directly from the grid.
+ */
+
 "use client";
 
 import { useEffect, useState } from "react";
@@ -16,6 +22,7 @@ export default function FavoritesPage() {
   const [favoriteIds, setFavoriteIds] = useState<string[]>([]);
   const [loading, setLoading] = useState(true);
 
+  // Fetch the user's favorite recipes on mount
   useEffect(() => {
     fetch("/api/favorites")
       .then((res) => res.json())
@@ -28,6 +35,7 @@ export default function FavoritesPage() {
       .finally(() => setLoading(false));
   }, []);
 
+  // Handles toggling a recipe favorite status; removes it from layout if unfavorited
   const handleToggle = async (recipeId: string) => {
     const res = await fetch("/api/favorites", {
       method: "POST",
@@ -101,3 +109,4 @@ export default function FavoritesPage() {
     </div>
   );
 }
+

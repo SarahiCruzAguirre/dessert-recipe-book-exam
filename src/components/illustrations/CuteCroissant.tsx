@@ -1,3 +1,8 @@
+/**
+ * SIDE: Client-side (Presenter Component)
+ * Description: SVG vector illustration of a cute walking croissant with a smiley face.
+ */
+
 import React from "react";
 
 interface CuteCroissantProps {
@@ -7,6 +12,7 @@ interface CuteCroissantProps {
 }
 
 export default function CuteCroissant({ className = "", width = 120, height = 120 }: CuteCroissantProps) {
+
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"

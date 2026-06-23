@@ -1,5 +1,14 @@
+/**
+ * SIDE: Server-side
+ * Description: Mongoose database schema and interface definition for User accounts.
+ * Includes email uniqueness constraints, basic validation rules, and role management.
+ */
+
 import mongoose, { Document, Schema } from "mongoose";
 
+/**
+ * Interface representing a User document in the database.
+ */
 export interface IUserDocument extends Document {
   name: string;
   email: string;
@@ -8,6 +17,9 @@ export interface IUserDocument extends Document {
   createdAt: Date;
 }
 
+/**
+ * Schema definition for the User collection.
+ */
 const UserSchema = new Schema<IUserDocument>(
   {
     name: {
@@ -43,3 +55,4 @@ const User =
   mongoose.models.User || mongoose.model<IUserDocument>("User", UserSchema);
 
 export default User;
+

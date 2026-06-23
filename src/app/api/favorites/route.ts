@@ -1,3 +1,9 @@
+/**
+ * SIDE: Server-side
+ * Description: API route handler to fetch or toggle user favorite recipes.
+ * Protects access by verifying user session token first before retrieving or updating.
+ */
+
 import { NextRequest, NextResponse } from "next/server";
 import { auth } from "@/lib/auth";
 import {
@@ -8,6 +14,10 @@ import {
 import { ApiResponse } from "@/types";
 
 // GET /api/favorites → recetas favoritas del usuario
+/**
+ * Retrieves the favorite recipe data for the currently authenticated user.
+ * Supports an 'idsOnly' query parameter to fetch raw IDs instead of populated objects.
+ */
 export async function GET(req: NextRequest) {
   const session = await auth();
   if (!session?.user) {
@@ -38,6 +48,9 @@ export async function GET(req: NextRequest) {
 }
 
 // POST /api/favorites → toggle favorito
+/**
+ * Toggles the favorite association status of a specific recipe for the active user session.
+ */
 export async function POST(req: NextRequest) {
   const session = await auth();
   if (!session?.user) {
@@ -66,3 +79,4 @@ export async function POST(req: NextRequest) {
     );
   }
 }
+

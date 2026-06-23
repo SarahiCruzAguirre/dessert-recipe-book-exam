@@ -1,11 +1,23 @@
+/**
+ * SIDE: Server-side
+ * Description: Mongoose database schema and interface for Favorite documents.
+ * Handles the mapping between User IDs and Recipe IDs with a unique compound index.
+ */
+
 import mongoose, { Document, Schema } from "mongoose";
 
+/**
+ * Interface representing the structure of a Favorite document in the database.
+ */
 export interface IFavoriteDocument extends Document {
   userId: mongoose.Types.ObjectId;
   recipeId: mongoose.Types.ObjectId;
   createdAt: Date;
 }
 
+/**
+ * Favorite Schema defining the relationship between User and Recipe.
+ */
 const FavoriteSchema = new Schema<IFavoriteDocument>(
   {
     userId: {
@@ -30,3 +42,4 @@ const Favorite =
   mongoose.model<IFavoriteDocument>("Favorite", FavoriteSchema);
 
 export default Favorite;
+

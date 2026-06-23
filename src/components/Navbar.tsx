@@ -1,3 +1,9 @@
+/**
+ * SIDE: Client-side
+ * Description: Global application header/navigation bar. Handles links to catalog and private views (favorites, admin),
+ * provides language switching controls (ES/EN), and user session indicators (Login/Logout buttons).
+ */
+
 "use client";
 
 import Link from "next/link";
@@ -7,6 +13,7 @@ import { LogIn, LogOut, Shield, User, Globe } from "lucide-react";
 import { useI18n } from "@/context/I18nContext";
 import CuteCroissant from "@/components/illustrations/CuteCroissant";
 import CatFavoriteIcon from "@/components/illustrations/CatFavoriteIcon";
+
 
 export default function Navbar() {
   const { data: session, status } = useSession();

@@ -1,3 +1,9 @@
+/**
+ * SIDE: Client-side
+ * Description: Registration page. Provides users with registration input fields,
+ * real-time strength feedback on passwords, and form validation, integrated with Spline 3D.
+ */
+
 "use client";
 
 import { useState } from "react";
@@ -7,6 +13,7 @@ import Script from "next/script";
 import { Eye, EyeOff, Loader2, CheckCircle2 } from "lucide-react";
 import { useI18n } from "@/context/I18nContext";
 import CuteCroissant from "@/components/illustrations/CuteCroissant";
+
 
 export default function RegisterPage() {
   const router = useRouter();
