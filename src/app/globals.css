@@ -1,0 +1,73 @@
+/*
+ * SIDE: Shared (Styles)
+ * Description: Global CSS stylesheet containing the Tailwind CSS v4 setup,
+ * custom typography configurations, color palette themes, animations,
+ * scrollbars, and helper skeleton effects for hydration.
+ */
+
+@import url('https://fonts.googleapis.com/css2?family=Fredoka:wght@300..700&family=Poppins:wght@300..700&display=swap');
+
+@import "tailwindcss";
+
+/* Tailwind v4 custom theme definitions */
+@theme {
+  --font-fredoka: 'Fredoka', sans-serif;
+  --font-poppins: 'Poppins', sans-serif;
+
+  --color-brand-blue: #0725b0;
+  --color-brand-cream: #e5ded4;
+  --color-brand-brown: #6b4a3a;
+  --color-brand-white: #f2efea;
+  --color-brand-charcoal: #3e3a36;
+}
+
+:root {
+  --font-display: var(--font-fredoka);
+  --font-body: var(--font-poppins);
+}
+
+body {
+  font-family: var(--font-body);
+  background-color: #f2efea; /* Brand White */
+  color: #3e3a36; /* Brand Charcoal */
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-display);
+}
+
+/* Scrollbar */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: #f2efea; }
+::-webkit-scrollbar-thumb { background: #e5ded4; border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: #6b4a3a; }
+
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+.skeleton {
+  background: linear-gradient(90deg, #e5ded4 25%, #f2efea 50%, #e5ded4 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+}
+
+/* Custom Float Animation */
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+}
+
+.animate-float {
+  animation: float 4s ease-in-out infinite;
+}
+
+@keyframes pulse-slow {
+  0%, 100% { opacity: 0.2; }
+  50% { opacity: 0.6; }
+}
+
+.animate-pulse-slow {
+  animation: pulse-slow 3s ease-in-out infinite;
+}
