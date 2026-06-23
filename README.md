@@ -1,5 +1,7 @@
 # RecipeBook - Sweet Bakery & Dessert Catalog
 
+**Despliegue / Deployment:** [https://dessert-recipe-book-exam.vercel.app/](https://dessert-recipe-book-exam.vercel.app/)
+
 RecipeBook is a modern, responsive, and visually appealing web application designed for exploring, managing, and sharing sweet bakery and dessert recipes. The platform provides a rich user experience featuring interactive recipe catalogs, user authentication, a customizable favorites list, multi-language support (Spanish and English), and an administrative control panel equipped with system metrics and email broadcast features.
 
 The application leverages a clean separation of concerns, maintaining strict boundaries between client-side interactive elements and server-side business logic, database queries, and secure API endpoints.
