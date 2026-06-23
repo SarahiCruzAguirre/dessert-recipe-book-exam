@@ -7,7 +7,9 @@
 import { connectDB } from "@/lib/db";
 import Favorite from "@/models/Favorite";
 import Recipe from "@/models/Recipe";
+import User from "@/models/User";
 import { IRecipe } from "@/types";
+
 
 // ── Obtener IDs de recetas favoritas de un usuario ───────────
 /**
@@ -17,8 +19,9 @@ import { IRecipe } from "@/types";
 export async function getUserFavoriteIds(userId: string): Promise<string[]> {
   await connectDB();
   const favorites = await Favorite.find({ userId }).select("recipeId").lean();
-  return favorites.map((f) => f.recipeId.toString());
+  return favorites.map((fav) => fav.recipeId.toString());
 }
+
 
 // ── Obtener recetas favoritas completas de un usuario ────────
 /**
@@ -33,8 +36,9 @@ export async function getUserFavorites(userId: string): Promise<IRecipe[]> {
     .lean();
 
   const recipes = favorites
-    .map((f) => f.recipeId as unknown as IRecipe)
+    .map((fav) => fav.recipeId as unknown as IRecipe)
     .filter(Boolean);
+
 
   return JSON.parse(JSON.stringify(recipes));
 }
@@ -94,18 +98,61 @@ export async function toggleFavorite(
   }
 }
 
+interface PopulatedFavorite {
+  _id: string;
+  userId?: { name: string; email: string; role?: string } | null;
+  recipeId?: { name: string; image: string } | null;
+  createdAt?: string | Date;
+}
+
 // ── Admin: ver todos los favoritos agrupados por usuario ─────
 /**
  * Admin utility: retrieves all favorite entries across the application,
  * populated with both User details and Recipe names/images.
+ * Also returns empty dummy entries for users with zero favorites to ensure
+ * they appear in the administration dashboard for actions like email broadcasts.
  */
 export async function getAllFavoritesWithUsers() {
   await connectDB();
-  const favorites = await Favorite.find({})
+  
+  // 1. Obtener todos los favoritos reales con usuarios y recetas
+  const dbFavorites = await Favorite.find({})
     .populate("userId", "name email role")
     .populate("recipeId", "name image")
     .sort({ createdAt: -1 })
     .lean();
-  return JSON.parse(JSON.stringify(favorites));
+
+  const favorites = dbFavorites as unknown as PopulatedFavorite[];
+
+  // 2. Obtener todos los usuarios de la base de datos
+  const allUsers = await User.find({}).select("name email role").lean();
+
+  // 3. Crear un conjunto de correos electrónicos de usuarios que ya tienen favoritos
+  const usersWithFavorites = new Set(
+    favorites
+      .map((fav) => fav.userId?.email)
+      .filter(Boolean)
+  );
+
+  // 4. Agregar una entrada dummy para cada usuario sin favoritos
+  const result: PopulatedFavorite[] = [...favorites];
+  for (const user of allUsers) {
+    if (!usersWithFavorites.has(user.email)) {
+      result.push({
+        _id: `dummy_${user._id}`,
+        userId: {
+          name: user.name,
+          email: user.email,
+          role: user.role || "user"
+        },
+        recipeId: null,
+        createdAt: user.createdAt
+      });
+    }
+  }
+
+  return JSON.parse(JSON.stringify(result));
 }
+
+
 
